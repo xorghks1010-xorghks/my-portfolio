@@ -94,8 +94,9 @@
         <li><a href="#s2">02. 누가 보나요</a></li>
         <li><a href="#s3">03. 디자인 방향</a></li>
         <li><a href="#s4">04. 핵심 기능</a></li>
-        <li><a href="#s5">05. 필요한 화면</a></li>
-        <li><a href="#s6">06. 얻고 싶은 것</a></li>
+        <li><a href="#s5">05. AI 추천 서비스</a></li>
+        <li><a href="#s6">06. 필요한 화면</a></li>
+        <li><a href="#s7">07. 얻고 싶은 것</a></li>
       </ol>
     </nav>
 
@@ -134,7 +135,8 @@
             <a href="https://rawg.io/" target="_blank" rel="noopener">RAWG</a> — 게임 카드 및 탐색 화면<br>
             <a href="https://www.igdb.com/" target="_blank" rel="noopener">IGDB</a> — 게임 정보, 장르, 플랫폼 구조<br>
             <a href="https://gg.deals/" target="_blank" rel="noopener">GG.deals</a> — 인기 게임·신작·랭킹 구성<br>
-            <a href="https://backloggd.com/" target="_blank" rel="noopener">Backloggd</a> — 평가·찜·개인화 UI
+            <a href="https://backloggd.com/" target="_blank" rel="noopener">Backloggd</a> — 평가·찜·개인화 UI<br>
+            <a href="https://nextrez.app/" target="_blank" rel="noopener">NextRez</a> — 취향 기반 AI 게임 추천 서비스
           </p>
         </div>
         <div class="card"><h3>전체 방향</h3><p>앱처럼 보이지 않도록 넓은 웹 레이아웃을 사용하고, 한 화면에 너무 많은 정보를 넣지 않습니다.</p></div>
@@ -159,7 +161,25 @@
     </section>
 
     <section id="s5">
-      <h2><span class="no">05</span>필요한 화면</h2>
+      <h2><span class="no">05</span>AI 추천 서비스</h2>
+      <p>
+        <a href="https://nextrez.app/" target="_blank" rel="noopener">NextRez</a>처럼 사용자의 취향에 맞춰 게임을 추천해 주는 AI 서비스를 GameFinder의 핵심 기능으로 구현합니다.
+        AI가 말로만 추천하는 것이 아니라, 실제 게임 데이터와 연결된 결과를 보여주는 것이 목표입니다.
+      </p>
+      <div class="cards" style="margin-top:16px">
+        <div class="card"><h3>1. 취향 입력</h3><p>좋아하는 게임, 선호 장르·플랫폼, 플레이 성향(스토리/경쟁/힐링 등)을 선택하거나 자유롭게 입력</p></div>
+        <div class="card"><h3>2. 취향 분석</h3><p>AI가 입력 내용을 분석해 장르, 태그, 분위기 같은 검색 가능한 취향 조건으로 정리</p></div>
+        <div class="card"><h3>3. 게임 데이터 매칭</h3><p>정리된 조건으로 외부 게임 데이터(RAWG, IGDB 등)에서 실제 존재하는 게임만 골라 후보 구성</p></div>
+        <div class="card"><h3>4. 추천 결과</h3><p>게임 카드와 함께 “왜 이 게임을 추천하는지” 이유를 표시하고, 게임 상세 화면으로 연결</p></div>
+      </div>
+      <div class="note">
+        AI가 존재하지 않는 게임을 만들어내지 않도록, 추천 후보는 반드시 게임 데이터에서 가져온 목록 안에서만 선택하게 설계합니다.
+        찜·추천 기록 저장은 이후 단계에서 확장합니다.
+      </div>
+    </section>
+
+    <section id="s6">
+      <h2><span class="no">06</span>필요한 화면</h2>
       <ul>
         <li><strong>메인</strong> — 인기 게임, 최신 게임, AI 추천을 간단하게 보여주는 첫 화면</li>
         <li><strong>인기 순위</strong> — 글로벌 인기 게임을 1위부터 최대 1000위까지 확인하는 화면</li>
@@ -174,8 +194,8 @@
       </div>
     </section>
 
-    <section id="s6">
-      <h2><span class="no">06</span>얻고 싶은 것</h2>
+    <section id="s7">
+      <h2><span class="no">07</span>얻고 싶은 것</h2>
       <div class="goal">
         <p>
           단순히 게임 정보를 보여주는 사이트를 만드는 것이 아니라,
