@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GameFinder - 기능 + 화면 정의서</title>
+  <style>
+    :root{--navy:#102a56;--text:#1b2430;--muted:#6b7280;--line:#d8dee8;--soft:#f4f6fa;--blue:#2563eb}
+    *{box-sizing:border-box}
+    body{margin:0;background:#eef1f6;color:var(--text);font-family:"Pretendard","Noto Sans KR","Malgun Gothic",-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;line-height:1.75;word-break:keep-all;overflow-wrap:break-word;-webkit-font-smoothing:antialiased}
+    .page{width:min(900px,calc(100% - 40px));margin:32px auto;padding:56px 64px 64px;background:#fff;border-radius:6px;box-shadow:0 2px 16px rgba(16,42,86,.08)}
+    .cover{padding-bottom:28px;border-bottom:3px solid var(--navy)}
+    .eyebrow{color:var(--blue);font-weight:800;letter-spacing:.14em;font-size:12.5px;margin-bottom:10px}
+    h1{margin:0;color:var(--navy);font-size:32px;line-height:1.3;letter-spacing:-.03em}
+    .subtitle{margin:12px 0 0;color:#475569;font-size:15.5px}
+    h2{margin:48px 0 18px;padding-bottom:10px;font-size:22px;color:var(--navy);letter-spacing:-.02em;border-bottom:1px solid var(--line)}
+    h3{margin:30px 0 8px;color:var(--navy);font-size:17px}
+    h4{margin:18px 0 6px;color:var(--navy);font-size:15px}
+    p{margin:8px 0;color:#334155;font-size:15px}
+    ul,ol{margin:8px 0;padding-left:22px}
+    li{margin:6px 0;color:#334155;font-size:15px}
+    li strong,p strong{color:var(--navy)}
+    a{color:var(--blue);text-decoration:none}
+    a:hover{text-decoration:underline}
+    code{background:var(--soft);padding:1px 6px;border-radius:4px;font-size:13px;color:#b42318}
+    blockquote{margin:16px 0;padding:12px 18px;background:#eef4ff;border-left:4px solid var(--blue);border-radius:0 8px 8px 0}
+    blockquote p{margin:0;font-size:14px}
+    hr{border:0;border-top:1px solid var(--line);margin:28px 0}
+    table{width:100%;border-collapse:collapse;font-size:14px;border-top:2px solid var(--navy);margin:14px 0}
+    th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+    th{background:var(--soft);color:#475569;font-size:12.5px;font-weight:700}
+    .footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);color:#94a3b8;font-size:12px;display:flex;justify-content:space-between}
+    @media(max-width:700px){
+      body{background:#fff}
+      .page{width:100%;margin:0;padding:32px 20px 48px;border-radius:0;box-shadow:none}
+      h1{font-size:26px}
+      table{display:block;overflow-x:auto;font-size:13px}
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="cover">
+      <div class="eyebrow">FUNCTION SPEC</div>
+      <h1>GameFinder 기능 + 화면 정의서</h1>
+      <div class="subtitle">Claude Code가 바로 구현할 수 있도록 기능 흐름과 화면 구성을 정리한 문서</div>
+    </div>
+<p style="margin-top:14px">관련 문서: <a href="gamefinder-project-plan.html">← 프로젝트 기획서</a></p>
+<hr>
+<h2>01. 사용자 시나리오</h2>
+<h3>01-1. 메인에서 핵심 기능을 선택하는 사용자</h3>
+<p>처음 들어온 사용자가 메인 Hero 슬라이드에서 AI 추천, 할인 게임, 인기 순위를 확인하고, 관심 있는 배너를 눌러 해당 기능으로 이동합니다.</p>
+<h3>01-2. 조건을 조합해 원하는 게임을 찾는 사용자</h3>
+<p>특정 플랫폼이나 장르의 게임을 찾고 싶은 사용자가 게임 찾기 화면에서 플랫폼, 장르, 태그를 선택하고 조건에 맞는 게임 목록을 확인합니다.</p>
+<h3>01-3. 인기 게임과 신작을 둘러보는 사용자</h3>
+<p>요즘 인기 있는 게임이나 새로 출시된 게임이 궁금한 사용자가 인기 순위 또는 신작 페이지에서 목록을 확인하고, 관심 있는 게임의 상세 화면으로 이동합니다.</p>
+<h3>01-4. 할인 중인 게임을 찾는 사용자</h3>
+<p>게임을 저렴하게 구매하고 싶은 사용자가 할인 게임 페이지에서 Steam, Epic Games 등 원하는 스토어를 선택하고 할인율과 가격을 비교합니다.</p>
+<h3>01-5. AI에게 게임을 추천받는 사용자</h3>
+<p>무슨 게임을 할지 고민하는 사용자가 플레이 가능한 플랫폼과 좋아했던 게임 3개 이상을 선택하면, AI가 취향을 분석해 실제 GameFinder 데이터 안에서 게임 5개를 추천합니다.</p>
+<h3>01-6. 추천 게임을 자세히 확인하는 사용자</h3>
+<p>AI 추천 결과에서 적합도와 추천 이유를 확인한 사용자가 마음에 드는 게임을 선택해 장르, 플랫폼, 평점, 스크린샷, 스토어별 가격과 할인 정보를 확인합니다.</p>
+<hr>
+<h2>02. 기능별 상세</h2>
+<h3>공통 헤더 / 검색</h3>
+<ul>
+<li><strong>목적:</strong> 모든 화면에서 주요 메뉴와 게임 검색 기능을 동일하게 제공합니다.</li>
+<li><strong>어느 화면:</strong> 전체 페이지 공통</li>
+<li><strong>사용자 행동:</strong> 게임 찾기 / 인기 순위 / 신작 / 할인 게임 / AI 추천 메뉴 클릭, 또는 검색창에 게임명 입력</li>
+<li><strong>입력값:</strong> 게임명 검색어</li>
+<li><strong>처리:</strong> 메뉴 클릭 시 해당 페이지로 이동합니다. 검색 시 게임명 기준으로 검색 결과를 조회합니다.</li>
+<li><strong>성공 결과:</strong> 해당 페이지 또는 검색 결과 목록을 표시합니다.</li>
+<li><strong>예외 상황:</strong> 검색 결과가 없으면 <code>검색 결과가 없습니다.</code>를 표시합니다.</li>
+<li><strong>우선순위:</strong> 필수</li>
+</ul>
+<hr>
+<h3>메인 Hero 슬라이드 배너</h3>
+<ul>
+<li><strong>목적:</strong> 메인 페이지 상단에서 핵심 기능을 한 영역 안에서 순차적으로 소개하고 각 기능 페이지로 연결합니다.</li>
+<li><strong>어느 화면:</strong> 메인 페이지 최상단 Hero 영역</li>
+</ul>
+<h4>슬라이드 구성</h4>
+<ol>
+<li><p><strong>AI 추천</strong></p>
+<ul>
+<li>문구: <code>내 취향에 맞는 게임을 찾아보세요</code></li>
+<li>이동: AI 추천 페이지</li>
+</ul>
+</li>
+<li><p><strong>할인 게임</strong></p>
+<ul>
+<li>문구: <code>지금 할인 중인 게임을 확인하세요</code></li>
+<li>이동: 할인 게임 페이지</li>
+</ul>
+</li>
+<li><p><strong>인기 순위</strong></p>
+<ul>
+<li>문구: <code>요즘 가장 인기 있는 게임은?</code></li>
+<li>이동: 인기 순위 페이지</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li><strong>사용자 행동:</strong> 배너 버튼 클릭 / 좌우 화살표 클릭 / 하단 인디케이터 클릭 / 마우스로 좌우 드래그 / 모바일에서 좌우 스와이프</li>
+<li><strong>처리:</strong> 사용자 조작에 따라 이전 또는 다음 슬라이드로 이동합니다. 각 슬라이드 버튼은 지정된 페이지로 이동합니다.</li>
+<li><strong>자동 동작:</strong> 약 5초 간격으로 다음 슬라이드로 자동 전환합니다.</li>
+<li><strong>드래그 동작:</strong> 마우스 왼쪽 버튼을 누른 채 좌우로 일정 거리 이상 끌면 이전/다음 슬라이드로 이동합니다. 짧은 드래그는 원래 위치로 복귀합니다.</li>
+<li><strong>스와이프 동작:</strong> 모바일/태블릿에서 좌우 터치 스와이프로 이전/다음 슬라이드로 전환합니다.</li>
+<li><strong>자동재생 정지:</strong> 마우스 오버, 드래그 중, 터치 중에는 자동 슬라이드를 일시정지합니다.</li>
+<li><strong>순환:</strong> 마지막 슬라이드 다음에는 첫 번째 슬라이드로 자연스럽게 이동합니다.</li>
+<li><strong>전환:</strong> 슬라이드는 좌우로 부드럽게 이동하며 전환 시간은 약 300~500ms로 합니다.</li>
+<li><strong>성공 결과:</strong> 현재 슬라이드가 명확하게 보이고 버튼·화살표·인디케이터·드래그/스와이프가 정상 동작합니다.</li>
+<li><strong>예외 상황:</strong> 자동 전환이 실패해도 사용자가 직접 좌우 버튼과 드래그로 이동할 수 있어야 합니다.</li>
+<li><strong>우선순위:</strong> 필수</li>
+</ul>
+<hr>
+<h3>메인 페이지</h3>
+<ul>
+<li><strong>목적:</strong> 사이트의 핵심 기능을 한 화면에서 빠르게 확인하게 합니다.</li>
+<li><strong>어느 화면:</strong> 메인</li>
+<li><strong>구성:</strong> Hero 슬라이드 / 글로벌 인기 TOP 5 / 최신 게임 5개 / 할인 게임 5개 / 플랫폼·장르 탐색 / Footer</li>
+<li><strong>사용자 행동:</strong> 게임 카드 클릭 / 더보기 / 플랫폼·장르 선택 / Hero 슬라이드 이용</li>
+<li><strong>성공 결과:</strong> 각 섹션의 대표 콘텐츠를 간단하게 표시하고 상세 페이지로 이동할 수 있습니다.</li>
+<li><strong>예외 상황:</strong> 특정 섹션의 데이터 조회 실패 시 해당 섹션에 재시도 버튼을 표시합니다.</li>
+<li><strong>우선순위:</strong> 필수</li>
+</ul>
+<hr>
+<h3>게임 찾기</h3>
+<ul>
+<li><strong>목적:</strong> 플랫폼, 장르, 태그를 조합해서 원하는 게임을 찾습니다.</li>
+<li><strong>어느 화면:</strong> 게임 찾기</li>
+<li><strong>사용자 행동:</strong> 플랫폼 / 장르 / 태그 체크, 정렬 조건 선택, 검색어 입력</li>
+<li><strong>입력값:</strong> <code>platform[]</code>, <code>genre[]</code>, <code>tag[]</code>, <code>keyword</code>, <code>sort</code></li>
+<li><strong>처리:</strong> 같은 그룹은 OR, 서로 다른 그룹은 AND로 검색합니다.</li>
+<li><strong>검색 예시:</strong> <code>(PC OR PS5) AND (RPG OR Action) AND (Open World)</code></li>
+<li><strong>성공 결과:</strong> 조건에 맞는 게임을 카드 그리드로 표시합니다.</li>
+<li><strong>예외 상황:</strong> 검색 결과가 0건이면 빈 결과 안내와 필터 초기화 버튼을 표시합니다.</li>
+<li><strong>우선순위:</strong> 필수</li>
+</ul>
+<hr>
+<h3>글로벌 인기 순위</h3>
+<ul>
+<li><strong>목적:</strong> 현재 인기 있는 게임을 순위 형태로 최대 1000위까지 확인합니다.</li>
+<li><strong>어느 화면:</strong> 인기 순위</li>
+<li><strong>사용자 행동:</strong> 플랫폼·장르 필터 선택, 페이지 이동</li>
+<li><strong>입력값:</strong> <code>platform</code>, <code>genre</code>, <code>page</code>, <code>size=100</code></li>
+<li><strong>처리:</strong> 인기 점수 기준 내림차순 정렬 후 100개 단위로 조회합니다.</li>
+<li><strong>성공 결과:</strong> 순위 / 게임 이미지 / 게임명 / 장르 / 플랫폼 / 평점 / 순위 변동을 표시합니다.</li>
+<li><strong>예외 상황:</strong> 해당 조건의 데이터가 없으면 빈 결과를 표시합니다.</li>
+<li><strong>우선순위:</strong> 필수</li>
+</ul>
+<hr>
+<h3>최신 게임</h3>
+<ul>
+<li><strong>목적:</strong> 최근 출시된 게임을 출시일 기준으로 확인합니다.</li>
+<li><strong>어느 화면:</strong> 신작</li>
+<li><strong>사용자 행동:</strong> 플랫폼·장르 필터 선택, 페이지 이동</li>
+<li><strong>처리:</strong> <code>releaseDate DESC</code> 기준으로 정렬합니다.</li>
+<li><strong>성공 결과:</strong> 최신 출시 게임 목록을 표시합니다.</li>
+<li><strong>예외 상황:</strong> 출시일 정보가 없는 게임은 최신 순위에서 제외하거나 별도로 처리합니다.</li>
+<li><strong>우선순위:</strong> 필수</li>
+</ul>
+<hr>
+<h3>할인 게임</h3>
+<ul>
+<li><strong>목적:</strong> 여러 게임 스토어에서 현재 할인 중인 게임을 한 화면에서 확인합니다.</li>
+<li><strong>어느 화면:</strong> 할인 게임</li>
+<li><strong>스토어:</strong> Steam / Epic Games / 기타 연동 가능한 스토어</li>
+<li><strong>사용자 행동:</strong> 스토어 선택 / 할인율 정렬 / 가격 정렬 / 게임 선택</li>
+<li><strong>입력값:</strong> <code>store[]</code>, <code>sort</code>, <code>page</code>, <code>size</code></li>
+<li><strong>처리:</strong> 현재 할인 중인 게임을 조회하고 할인율·가격 조건에 따라 정렬합니다.</li>
+<li><strong>성공 결과:</strong> 게임 이미지 / 게임명 / 스토어 / 정가 / 할인가 / 할인율 / 스토어 이동 버튼을 표시합니다.</li>
+<li><strong>예외 상황:</strong> 가격 데이터가 없으면 <code>가격 정보 없음</code>을 표시하고, 할인 종료 시 목록에서 제외합니다.</li>
+<li><strong>메인 노출:</strong> 메인 페이지에는 할인 게임 TOP 5만 노출하고 <code>전체보기</code>를 통해 할인 게임 페이지로 이동합니다.</li>
+<li><strong>우선순위:</strong> 필수</li>
+</ul>
+<hr>
+<h3>게임 상세 — 가격 / 할인 정보</h3>
+<ul>
+<li><strong>목적:</strong> 게임 상세 화면에서 여러 스토어의 현재 가격과 할인 정보를 비교합니다.</li>
+<li><strong>어느 화면:</strong> 게임 상세</li>
+<li><strong>성공 결과:</strong> 스토어별 정가 / 할인가 / 할인율 / 최저가 스토어 / 스토어 이동 버튼을 표시합니다.</li>
+<li><strong>예외 상황:</strong> 판매하지 않는 스토어는 표시하지 않거나 <code>판매 없음</code>을 표시합니다.</li>
+<li><strong>우선순위:</strong> 필수</li>
+</ul>
+<hr>
+<h3>게임 상세</h3>
+<ul>
+<li><strong>목적:</strong> 선택한 게임의 핵심 정보를 한 화면에서 확인합니다.</li>
+<li><strong>어느 화면:</strong> 게임 상세</li>
+<li><strong>사용자 행동:</strong> 게임 카드 또는 리스트 항목 클릭</li>
+<li><strong>입력값:</strong> <code>gameId</code></li>
+<li><strong>성공 결과:</strong> 게임명 / 커버 / 소개 / 출시일 / 개발사 / 장르 / 플랫폼 / 태그 / 평점 / 가격·할인 / 스크린샷 / 비슷한 게임을 표시합니다.</li>
+<li><strong>예외 상황:</strong> 존재하지 않는 <code>gameId</code> 접근 시 404 화면을 표시합니다.</li>
+<li><strong>우선순위:</strong> 필수</li>
+</ul>
+<hr>
+<h3>AI 추천 — STEP 1 플랫폼 선택</h3>
+<ul>
+<li><strong>목적:</strong> 사용자가 실제로 플레이 가능한 플랫폼을 먼저 제한합니다.</li>
+<li><strong>사용자 행동:</strong> PC / PS5 / Xbox Series X|S / Nintendo Switch 2 중 하나 이상 선택</li>
+<li><strong>성공 결과:</strong> 선택 카드는 파란색 테두리와 체크 표시를 보여주고 다음 버튼을 활성화합니다.</li>
+<li><strong>예외 상황:</strong> 플랫폼 미선택 시 다음 버튼을 비활성화합니다.</li>
+<li><strong>우선순위:</strong> 필수</li>
+</ul>
+<hr>
+<h3>AI 추천 — STEP 2 좋아하는 게임 선택</h3>
+<ul>
+<li><strong>목적:</strong> 사용자의 취향을 파악하기 위한 기준 게임을 수집합니다.</li>
+<li><strong>사용자 행동:</strong> 검색창에서 게임 검색 후 3~10개 선택, 선택 게임 삭제 가능</li>
+<li><strong>성공 결과:</strong> 선택 게임 카드와 선택 수(예: <code>3 / 10</code>)를 표시하고 3개 이상 선택 시 추천 버튼을 활성화합니다.</li>
+<li><strong>예외 상황:</strong> 3개 미만이면 추천 실행 불가 / 10개 초과 선택 불가</li>
+<li><strong>참고 UX:</strong> NextRez처럼 <code>검색 → 선택 → 선택 목록 확인 → 추천 실행</code>의 단순한 흐름을 참고합니다.</li>
+<li><strong>우선순위:</strong> 필수</li>
+</ul>
+<hr>
+<h3>AI 추천 — STEP 3 분석</h3>
+<ul>
+<li><strong>목적:</strong> 선택 게임과 플랫폼을 바탕으로 실제 게임 데이터에서 후보를 만든 뒤 AI에게 전달합니다.</li>
+<li><strong>처리 흐름:</strong><ol>
+<li>선택 게임의 장르/태그 분석</li>
+<li>플랫폼 필터 적용</li>
+<li>DB에서 후보 20~30개 추출</li>
+<li>AI 호출</li>
+</ol>
+</li>
+<li><strong>성공 결과:</strong> 추천 결과 5개 생성</li>
+<li><strong>예외 상황:</strong> AI 오류 시 1회 재시도 후 실패하면 DB 기반 대체 추천 또는 재시도 안내</li>
+<li><strong>우선순위:</strong> 필수</li>
+</ul>
+<hr>
+<h3>AI 추천 — STEP 4 추천 결과</h3>
+<ul>
+<li><strong>목적:</strong> AI가 선택한 최종 추천 게임 5개와 추천 이유를 보여줍니다.</li>
+<li><strong>처리:</strong> AI는 DB 후보 중 5개를 선택하고 <code>gameId</code>, <code>score</code>, <code>reason</code>만 반환합니다.</li>
+<li><strong>성공 결과:</strong> 순위 / 게임 이미지 / 게임명 / 추천 적합도 / 장르 / 플랫폼 / 추천 이유 / 상세보기 버튼을 표시합니다.</li>
+<li><strong>예외 상황:</strong> 추천 결과가 5개 미만이면 가능한 결과만 노출하고 안내 문구를 표시합니다.</li>
+<li><strong>중요:</strong> AI가 게임명을 직접 생성하지 않습니다. 실제 게임 정보는 <code>gameId</code> 기준으로 DB에서 조회합니다.</li>
+<li><strong>우선순위:</strong> 필수</li>
+</ul>
+<hr>
+<h2>03. 화면 정의</h2>
+<table>
+<thead>
+<tr>
+<th>화면 ID</th>
+<th>화면명</th>
+<th>주요 구성</th>
+<th>주요 이동</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SCR-001</td>
+<td>메인</td>
+<td>Hero 슬라이드, 인기 TOP5, 최신 5개, 할인 5개, 플랫폼/장르 탐색</td>
+<td>게임 찾기 / 인기 순위 / 신작 / 할인 게임 / AI 추천</td>
+</tr>
+<tr>
+<td>SCR-002</td>
+<td>게임 찾기</td>
+<td>좌측 필터 + 우측 카드 그리드</td>
+<td>게임 상세</td>
+</tr>
+<tr>
+<td>SCR-003</td>
+<td>인기 순위</td>
+<td>플랫폼·장르 필터 + 랭킹 리스트</td>
+<td>게임 상세</td>
+</tr>
+<tr>
+<td>SCR-004</td>
+<td>신작</td>
+<td>필터 + 최신순 카드 그리드</td>
+<td>게임 상세</td>
+</tr>
+<tr>
+<td>SCR-005</td>
+<td>할인 게임</td>
+<td>스토어 필터 + 할인율/가격 정렬 + 할인 카드</td>
+<td>게임 상세 / 스토어 이동</td>
+</tr>
+<tr>
+<td>SCR-006</td>
+<td>게임 상세</td>
+<td>게임 정보, 가격 비교, 스크린샷, 비슷한 게임</td>
+<td>스토어 / 비슷한 게임 상세</td>
+</tr>
+<tr>
+<td>SCR-007</td>
+<td>AI 추천 1단계</td>
+<td>진행 표시 + 플랫폼 선택 카드</td>
+<td>AI 추천 2단계</td>
+</tr>
+<tr>
+<td>SCR-008</td>
+<td>AI 추천 2단계</td>
+<td>검색창, 선택 게임, 상세 취향 설정</td>
+<td>분석 중</td>
+</tr>
+<tr>
+<td>SCR-009</td>
+<td>AI 분석 중</td>
+<td>진행 단계, 로딩, 처리 상태</td>
+<td>AI 추천 결과</td>
+</tr>
+<tr>
+<td>SCR-010</td>
+<td>AI 추천 결과</td>
+<td>추천 5개, 적합도, 이유, 상세보기</td>
+<td>게임 상세</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>04. UI 디자인 규칙</h2>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>기준</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>전체 스타일</td>
+<td>밝고 깔끔한 Desktop Web. 앱처럼 카드와 버튼을 과도하게 사용하지 않음</td>
+</tr>
+<tr>
+<td>레이아웃 폭</td>
+<td>최대 1200~1280px, 가운데 정렬</td>
+</tr>
+<tr>
+<td>배경</td>
+<td><code>#FFFFFF</code>, 보조 영역 <code>#F7F8FA</code></td>
+</tr>
+<tr>
+<td>포인트 컬러</td>
+<td><code>#2563EB</code></td>
+</tr>
+<tr>
+<td>메인 텍스트</td>
+<td><code>#111827</code></td>
+</tr>
+<tr>
+<td>보조 텍스트</td>
+<td><code>#6B7280</code></td>
+</tr>
+<tr>
+<td>카드</td>
+<td>얇은 테두리 또는 무테, 그림자 최소화</td>
+</tr>
+<tr>
+<td>게임 이미지</td>
+<td>주요 시각 요소로 사용</td>
+</tr>
+<tr>
+<td>Hero</td>
+<td>3개의 핵심 슬라이드만 사용, 좌우 이동이 자연스럽고 콘텐츠가 한눈에 들어오게 구성</td>
+</tr>
+<tr>
+<td>반응형</td>
+<td>Desktop 우선, Tablet / Mobile 대응</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>05. 저장 / 연동 데이터</h2>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>주요 항목</th>
+<th>용도</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Game</td>
+<td>id, name, description, releaseDate, coverImage, rating, popularityScore</td>
+<td>게임 기본 정보</td>
+</tr>
+<tr>
+<td>Platform</td>
+<td>id, name</td>
+<td>PC / PS5 / Xbox / Switch 2 분류</td>
+</tr>
+<tr>
+<td>Genre</td>
+<td>id, name</td>
+<td>RPG / Action / FPS 등</td>
+</tr>
+<tr>
+<td>Tag</td>
+<td>id, name</td>
+<td>Open World / Farming / Souls-like 등</td>
+</tr>
+<tr>
+<td>Store Price</td>
+<td>storeName, regularPrice, salePrice, discountRate, storeUrl</td>
+<td>스토어별 가격·할인 정보</td>
+</tr>
+<tr>
+<td>AI Request</td>
+<td>platformIds[], selectedGameIds[], optional preference values</td>
+<td>AI 추천 입력</td>
+</tr>
+<tr>
+<td>AI Result</td>
+<td>gameId, score, reason</td>
+<td>AI 추천 결과</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>06. 분류 규칙</h2>
+<h3>Genre</h3>
+<p>게임의 큰 장르를 의미합니다.</p>
+<p>예:</p>
+<ul>
+<li>RPG</li>
+<li>Action</li>
+<li>FPS</li>
+<li>Adventure</li>
+<li>Strategy</li>
+<li>Simulation</li>
+<li>Sports</li>
+<li>Racing</li>
+<li>Puzzle</li>
+<li>Horror</li>
+</ul>
+<h3>Tag</h3>
+<p>게임의 세부 특징을 의미합니다.</p>
+<p>예:</p>
+<ul>
+<li>Open World</li>
+<li>Souls-like</li>
+<li>Farming</li>
+<li>Roguelike</li>
+<li>Single Player</li>
+<li>Multiplayer</li>
+<li>Co-op</li>
+<li>Story Rich</li>
+</ul>
+<blockquote>
+<p><code>Open World</code>는 Genre가 아니라 Tag로 처리합니다.</p>
+</blockquote>
+<hr>
+<h2>07. 구현 시 지켜야 할 규칙</h2>
+<ol>
+<li>기획서와 이 <code>plan.md</code>를 최우선 기준으로 구현합니다.</li>
+<li>문서에 없는 기능을 임의로 추가하지 않습니다.</li>
+<li>Hero 슬라이드는 버튼, 인디케이터, 마우스 드래그, 터치 스와이프를 모두 지원합니다.</li>
+<li>Hero 자동 전환은 사용자가 직접 조작할 때 일시정지합니다.</li>
+<li>게임 정보와 할인 정보는 역할을 분리해 관리합니다.</li>
+<li>모든 데이터 조회 화면에 Loading / Empty / Error / Retry 상태를 구현합니다.</li>
+<li>AI는 DB 후보 중에서만 추천하며 실제 게임 정보를 임의 생성하지 않습니다.</li>
+<li>Genre와 Tag를 구분하고 Open World는 Tag로 처리합니다.</li>
+<li>같은 필터 그룹은 OR, 다른 그룹끼리는 AND로 처리합니다.</li>
+<li>반복 UI는 공통 컴포넌트로 분리합니다.</li>
+</ol>
+<hr>
+<h2>08. 구현 전 먼저 정리할 것</h2>
+<p>바로 코딩을 시작하지 않습니다.</p>
+<p>먼저 아래 내용을 정리하고 사용자 확인을 받은 뒤 구현합니다.</p>
+<ol>
+<li>페이지 목록</li>
+<li>라우팅 구조</li>
+<li>공통 컴포넌트</li>
+<li>페이지별 컴포넌트</li>
+<li>DB 모델</li>
+<li>API 목록</li>
+<li>AI 추천 처리 흐름</li>
+<li>개발 순서</li>
+</ol>
+
+    <div class="footer"><span>GameFinder Function Spec</span><span>FUNCTION SPEC</span></div>
+  </main>
+</body>
+</html>
